@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useState, useEffect } from "react";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { SystemProgram, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { CountdownTimer } from "./CountdownTimer";
 import { HeartbeatButton } from "./HeartbeatButton";
 import { VaultCard } from "./VaultCard";
 import { ShareBlink } from "./ShareBlink";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import { useProgram, getUserProfilePDA, getVaultPDA } from "@/hooks/useProgram";
+import { useProgram, getUserProfilePDA, getVaultPDA, getGraveyardPDA } from "@/hooks/useProgram";
 
 // V3: 冷却期常量
 const THREE_DAYS_SECONDS = 3 * 24 * 60 * 60;
@@ -16,6 +16,7 @@ const MIN_VAULT_FOR_RESURRECT = 0.01 * LAMPORTS_PER_SOL;
 
 export function Dashboard() {
     const { publicKey } = useWallet();
+    const { connection } = useConnection();
     const { program } = useProgram();
     const {
         isLoading,
@@ -26,6 +27,43 @@ export function Dashboard() {
     } = useUserProfile();
 
     const [isResurrecting, setIsResurrecting] = useState(false);
+    const [isGraveyardInit, setIsGraveyardInit] = useState(true);
+
+    // 检查 Graveyard 初始化状态
+    useEffect(() => {
+        const check = async () => {
+            if (!connection) return;
+            try {
+                const [pda] = getGraveyardPDA();
+                const info = await connection.getAccountInfo(pda);
+                setIsGraveyardInit(!!info);
+            } catch (e) {
+                console.error("Failed to check graveyard:", e);
+            }
+        };
+        check();
+    }, [connection]);
+
+    // 初始化 Graveyard
+    const handleInitializeGraveyard = async () => {
+        if (!program || !publicKey) return;
+        try {
+            const [graveyardPDA] = getGraveyardPDA();
+            await (program.methods as any)
+                .initializeGraveyard()
+                .accounts({
+                    authority: publicKey,
+                    graveyard: graveyardPDA,
+                    systemProgram: SystemProgram.programId,
+                })
+                .rpc();
+            alert("✅ 墓地初始化成功！");
+            setIsGraveyardInit(true);
+        } catch (e) {
+            console.error("Init failed:", e);
+            alert("初始化失败: " + (e as Error).message);
+        }
+    };
 
     // V3: 计算复活冷却倒计时
     const now = Math.floor(Date.now() / 1000);
@@ -93,7 +131,14 @@ export function Dashboard() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className={`max-w-4xl mx-auto px-4 py-8 transition-all duration-1000 ${profile.isDead ? "grayscale contrast-125 brightness-75" : ""
+            }`}>
+            {/* 死亡状态横幅 */}
+            {profile.isDead && (
+                <div className="fixed top-16 left-0 right-0 bg-red-600/90 text-white text-center py-2 font-bold z-40 animate-pulse backdrop-blur-sm shadow-lg shadow-red-900/50">
+                    💀 角色已确认死亡 | 正在等待复活 ({formatCooldown(resurrectCooldown)})
+                </div>
+            )}
             {/* 心电图装饰线 */}
             <div className="mb-8 overflow-hidden h-12 relative opacity-30">
                 <svg viewBox="0 0 1200 50" className="w-[200%] h-full ecg-line">
@@ -104,6 +149,18 @@ export function Dashboard() {
                         fill="none"
                     />
                 </svg>
+            </div>
+
+            {/* 标题栏 */}
+            <div className="flex items-center justify-between mb-8 px-2">
+                <div>
+                    <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-[var(--color-alive)] to-[var(--color-rip)] bg-clip-text text-transparent">
+                        💓 续命台
+                    </h1>
+                    <p className="text-[var(--text-secondary)] text-sm">
+                        每日签到，保持存活。断签即死，遗产瓜分。
+                    </p>
+                </div>
             </div>
 
             {/* 主卡片 - 生存状态 */}
@@ -266,6 +323,22 @@ export function Dashboard() {
             <div className="mt-8">
                 <ShareBlink />
             </div>
+
+            {/* 管理员功能：初始化墓地 */}
+            {!isGraveyardInit && (
+                <div className="card mt-8 border-2 border-red-500/50 bg-red-900/20">
+                    <h3 className="text-xl font-bold text-red-400 mb-2">⚠️ 系统未初始化</h3>
+                    <p className="text-sm text-[var(--text-secondary)] mb-4">
+                        公共墓地账户尚未创建，这会导致 Loot 和 RIP 功能无法使用。请点击下方按钮进行初始化。
+                    </p>
+                    <button
+                        onClick={handleInitializeGraveyard}
+                        className="w-full btn bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-lg pulse-glow"
+                    >
+                        ⚰️ 初始化墓地 (One-time Setup)
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

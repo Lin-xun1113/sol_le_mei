@@ -3,12 +3,32 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { usePathname } from "next/navigation";
 
 // 动态导入钱包按钮，禁用 SSR 以避免 Hydration 错误
 const WalletMultiButton = dynamic(
     () => import("@solana/wallet-adapter-react-ui").then((mod) => mod.WalletMultiButton),
     { ssr: false }
 );
+
+function NavLink({ href, label }: { href: string; label: string }) {
+    const pathname = usePathname();
+    const isActive = pathname === href;
+
+    return (
+        <Link
+            href={href}
+            className={`relative px-1 py-1 transition-colors flex items-center gap-1
+                ${isActive ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}
+            `}
+        >
+            <span>{label}</span>
+            {isActive && (
+                <span className="absolute bottom-[-20px] left-0 w-full h-[3px] bg-gradient-to-r from-[var(--color-alive)] to-[var(--color-rip)] shadow-lg shadow-[var(--color-alive)]/50 rounded-full" />
+            )}
+        </Link>
+    );
+}
 
 export function Navbar() {
     const { connected } = useWallet();
@@ -29,24 +49,9 @@ export function Navbar() {
                     <div className="hidden md:flex items-center gap-6">
                         {connected && (
                             <>
-                                <Link
-                                    href="/"
-                                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                                >
-                                    Dashboard
-                                </Link>
-                                <Link
-                                    href="/hunt"
-                                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1"
-                                >
-                                    <span>🦅</span> 狩猎场
-                                </Link>
-                                <Link
-                                    href="/rip"
-                                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1"
-                                >
-                                    <span>🕯️</span> RIP
-                                </Link>
+                                <NavLink href="/" label="💓 续命台" />
+                                <NavLink href="/hunt" label="🦅 狩猎场" />
+                                <NavLink href="/rip" label="🕯️ RIP" />
                             </>
                         )}
                     </div>

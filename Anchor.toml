@@ -5,11 +5,11 @@ package_manager = "yarn"
 resolution = true
 skip-lint = false
 
-[programs.localnet]
-sol_le_mei = "3Y9FgmkXC5Ar2DXDXYUTiiyZYwEo4zLh2Fcd3Bg98iJj"
-
 [programs.devnet]
-sol_le_mei = "3Y9FgmkXC5Ar2DXDXYUTiiyZYwEo4zLh2Fcd3Bg98iJj"
+sol_le_mei = "7aNZ9FajaheBHvxuAvw83YxZd4HTUL8S1whpx3z9oJfa"
+
+[programs.localnet]
+sol_le_mei = "7aNZ9FajaheBHvxuAvw83YxZd4HTUL8S1whpx3z9oJfa"
 
 [registry]
 url = "https://api.apr.dev"
