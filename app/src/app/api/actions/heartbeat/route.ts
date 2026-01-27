@@ -34,7 +34,7 @@ export const GET = async (req: Request) => {
                 {
                     type: "transaction",
                     label: "💓 签到续命",
-                    href: "/api/actions/heartbeat",
+                    href: `${baseUrl}/api/actions/heartbeat`,
                 },
             ],
         },

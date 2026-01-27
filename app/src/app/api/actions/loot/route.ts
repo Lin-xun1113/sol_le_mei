@@ -36,7 +36,7 @@ export const GET = async (req: Request) => {
                 {
                     type: "transaction",
                     label: "🦅 捡漏",
-                    href: "/api/actions/loot?target={target}",
+                    href: `${baseUrl}/api/actions/loot?target={target}`,
                     parameters: [
                         {
                             name: "target",

@@ -35,7 +35,7 @@ export const GET = async (req: Request) => {
                 {
                     type: "transaction",
                     label: "🕯️ 发送 RIP",
-                    href: "/api/actions/rip?target={target}",
+                    href: `${baseUrl}/api/actions/rip?target={target}`,
                     parameters: [
                         {
                             name: "target",
