@@ -1,0 +1,30 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#2d3a1e"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f1c40f"/>
+      <stop offset="100%" style="stop-color:#e67e22"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Vulture icon -->
+  <text x="600" y="280" font-size="120" text-anchor="middle">🦅</text>
+  
+  <!-- Title -->
+  <text x="600" y="400" font-family="Arial, sans-serif" font-size="64" font-weight="bold" 
+        text-anchor="middle" fill="#fff">Sol了没 | 秃鹫捡漏</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="470" font-family="Arial, sans-serif" font-size="32" 
+        text-anchor="middle" fill="#a0a0a0">他死了，遗产归你！50% 到手 💰</text>
+  
+  <!-- Badge -->
+  <rect x="500" y="520" width="200" height="40" rx="20" fill="#f1c40f" opacity="0.2"/>
+  <text x="600" y="548" font-family="Arial, sans-serif" font-size="18" 
+        text-anchor="middle" fill="#f1c40f">Solana Blinks</text>
+</svg>

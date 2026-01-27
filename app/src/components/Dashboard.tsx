@@ -6,6 +6,7 @@ import { SystemProgram, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { CountdownTimer } from "./CountdownTimer";
 import { HeartbeatButton } from "./HeartbeatButton";
 import { VaultCard } from "./VaultCard";
+import { ShareBlink } from "./ShareBlink";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { useProgram, getUserProfilePDA, getVaultPDA } from "@/hooks/useProgram";
 
@@ -193,7 +194,7 @@ export function Dashboard() {
             {/* 下方信息网格 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Vault 卡片 */}
-                <VaultCard balance={vaultBalance} onSuccess={refetch} />
+                <VaultCard balance={vaultBalance} isDead={profile.isDead} onSuccess={refetch} />
 
                 {/* RIP 统计卡片 */}
                 <div className="card">
@@ -259,6 +260,11 @@ export function Dashboard() {
                         </span>
                     </div>
                 </div>
+            </div>
+
+            {/* 分享 Blink */}
+            <div className="mt-8">
+                <ShareBlink />
             </div>
         </div>
     );

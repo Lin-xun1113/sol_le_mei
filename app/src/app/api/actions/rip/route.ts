@@ -5,23 +5,25 @@ import {
     createPostResponse,
     ACTIONS_CORS_HEADERS,
 } from "@solana/actions";
-import { PublicKey, Transaction } from "@solana/web3.js";
+import { PublicKey, Transaction, SystemProgram } from "@solana/web3.js";
 import {
     connection,
     getProgram,
     getUserProfilePDA,
+    getVaultPDA,
+    getGraveyardPDA,
     getRipRecordPDA,
     PROGRAM_ID
 } from "@/lib/program";
 
-// GET handler for displaying the RIP action
 export const GET = async (req: Request) => {
     const url = new URL(req.url);
     const targetAddress = url.searchParams.get("target");
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://your-domain.com";
 
     const payload: ActionGetResponse = {
         type: "action",
-        icon: "https://i.imgur.com/YQNzL7U.png", // 蜡烛/墓碑图标
+        icon: `${baseUrl}/blink-rip.svg`,
         title: "🕯️ Sol了没 - 发送 RIP",
         description: targetAddress
             ? `为 ${targetAddress.slice(0, 4)}...${targetAddress.slice(-4)} 点燃一根蜡烛，祈祷 TA 别断签。如果 TA 死了，你可能会分到遗产！`
@@ -109,14 +111,20 @@ export const POST = async (req: Request) => {
             );
         }
 
-        // Build send_rip instruction
+        const [targetVaultPDA] = getVaultPDA(target);
+        const [graveyardPDA] = getGraveyardPDA();
+
+        // Build send_rip instruction (V3: 需要 rip_amount 参数)
         const ix = await program.methods
-            .sendRip()
+            .sendRip(1) // 默认发送 1 个 RIP
             .accounts({
                 sender: sender,
                 targetProfile: targetProfilePDA,
                 targetOwner: target,
+                targetVault: targetVaultPDA,
+                graveyard: graveyardPDA,
                 ripRecord: ripRecordPDA,
+                systemProgram: SystemProgram.programId,
             })
             .instruction();
 

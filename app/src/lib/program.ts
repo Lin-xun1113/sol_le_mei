@@ -17,7 +17,7 @@ export function getProgram(): Program {
     connection,
     publicKey: null,
   } as unknown as AnchorProvider;
-  
+
   return new Program(idl as Idl, provider);
 }
 
@@ -46,6 +46,13 @@ export function getRipRecordPDA(sender: PublicKey, target: PublicKey): [PublicKe
 export function getGraveyardPDA(): [PublicKey, number] {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("graveyard")],
+    PROGRAM_ID
+  );
+}
+
+export function getDeathRecordPDA(deceased: PublicKey): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("death"), deceased.toBuffer()],
     PROGRAM_ID
   );
 }

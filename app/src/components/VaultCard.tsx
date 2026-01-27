@@ -8,10 +8,11 @@ import { BN } from "@coral-xyz/anchor";
 
 interface Props {
     balance: number; // lamports
+    isDead?: boolean; // 死亡状态下禁止存款
     onSuccess?: () => void;
 }
 
-export function VaultCard({ balance, onSuccess }: Props) {
+export function VaultCard({ balance, isDead = false, onSuccess }: Props) {
     const { publicKey } = useWallet();
     const { program } = useProgram();
     const [showDeposit, setShowDeposit] = useState(false);
@@ -71,14 +72,15 @@ export function VaultCard({ balance, onSuccess }: Props) {
                 </p>
             </div>
 
-            {!showDeposit ? (
+            {!isDead && !showDeposit && (
                 <button
                     onClick={() => setShowDeposit(true)}
                     className="btn-secondary w-full mt-4"
                 >
                     💵 存入资金
                 </button>
-            ) : (
+            )}
+            {!isDead && showDeposit && (
                 <div className="mt-4 space-y-3">
                     <input
                         type="number"

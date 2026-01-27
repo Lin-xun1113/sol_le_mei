@@ -1,0 +1,37 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Heartbeat line -->
+  <polyline points="0,315 400,315 450,315 460,250 480,380 500,200 520,400 540,315 600,315 1200,315" 
+            fill="none" stroke="#ff6b9d" stroke-width="3" opacity="0.5"/>
+  
+  <!-- Heart icon -->
+  <text x="600" y="280" font-size="120" text-anchor="middle" filter="url(#glow)" fill="#ff6b9d">💓</text>
+  
+  <!-- Title -->
+  <text x="600" y="400" font-family="Arial, sans-serif" font-size="64" font-weight="bold" 
+        text-anchor="middle" fill="#fff">Sol了没 | NotDeadYet</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="470" font-family="Arial, sans-serif" font-size="32" 
+        text-anchor="middle" fill="#a0a0a0">你还活着吗？签到续命！断签即死 ☠️</text>
+  
+  <!-- Badge -->
+  <rect x="500" y="520" width="200" height="40" rx="20" fill="#ff6b9d" opacity="0.2"/>
+  <text x="600" y="548" font-family="Arial, sans-serif" font-size="18" 
+        text-anchor="middle" fill="#ff6b9d">Solana Blinks</text>
+</svg>

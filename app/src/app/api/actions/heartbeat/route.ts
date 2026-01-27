@@ -19,9 +19,11 @@ import {
 } from "@/lib/program";
 
 export const GET = async () => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://your-domain.com";
+
     const payload: ActionGetResponse = {
         type: "action",
-        icon: "https://i.imgur.com/7X8YQ6h.png", // 骷髅头心脏图标
+        icon: `${baseUrl}/blink-heartbeat.svg`,
         title: "💓 Sol了没 - 签到续命",
         description: "点击证明你还活着！每日签到，续命成功。断签即死，遗产被瓜分。",
         label: "签到 Check In",

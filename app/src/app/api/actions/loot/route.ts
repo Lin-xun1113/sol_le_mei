@@ -5,13 +5,14 @@ import {
     createPostResponse,
     ACTIONS_CORS_HEADERS,
 } from "@solana/actions";
-import { PublicKey, Transaction } from "@solana/web3.js";
+import { PublicKey, Transaction, SystemProgram } from "@solana/web3.js";
 import {
     connection,
     getProgram,
     getUserProfilePDA,
     getVaultPDA,
     getGraveyardPDA,
+    getDeathRecordPDA,
     PROGRAM_ID
 } from "@/lib/program";
 
@@ -19,10 +20,11 @@ import {
 export const GET = async (req: Request) => {
     const url = new URL(req.url);
     const targetAddress = url.searchParams.get("target");
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://your-domain.com";
 
     const payload: ActionGetResponse = {
         type: "action",
-        icon: "https://i.imgur.com/K3Q8Z6h.png", // 秃鹫/宝箱图标
+        icon: `${baseUrl}/blink-loot.svg`,
         title: "🦅 Sol了没 - 秃鹫捡漏",
         description: targetAddress
             ? `用户 ${targetAddress.slice(0, 4)}...${targetAddress.slice(-4)} 已死亡！点击捡走 TA 的遗产（50% 归你，50% 进奖池）。`
@@ -92,6 +94,7 @@ export const POST = async (req: Request) => {
         const [userProfilePDA] = getUserProfilePDA(target);
         const [vaultPDA] = getVaultPDA(target);
         const [graveyardPDA] = getGraveyardPDA();
+        const [deathRecordPDA] = getDeathRecordPDA(target);
 
         // Check if target profile exists and is dead
         const targetProfileInfo = await connection.getAccountInfo(userProfilePDA);
@@ -120,6 +123,8 @@ export const POST = async (req: Request) => {
                 userProfile: userProfilePDA,
                 vault: vaultPDA,
                 graveyard: graveyardPDA,
+                deathRecord: deathRecordPDA,
+                systemProgram: SystemProgram.programId,
             })
             .instruction();
 
