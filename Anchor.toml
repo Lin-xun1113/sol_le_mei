@@ -6,10 +6,10 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-sol_le_mei = "7Xt8JnxfvHwJcvBtR6giutcAhbUGVSCevNAXGr3xbaHy"
+sol_le_mei = "3Y9FgmkXC5Ar2DXDXYUTiiyZYwEo4zLh2Fcd3Bg98iJj"
 
 [programs.devnet]
-sol_le_mei = "7Xt8JnxfvHwJcvBtR6giutcAhbUGVSCevNAXGr3xbaHy"
+sol_le_mei = "3Y9FgmkXC5Ar2DXDXYUTiiyZYwEo4zLh2Fcd3Bg98iJj"
 
 [registry]
 url = "https://api.apr.dev"
