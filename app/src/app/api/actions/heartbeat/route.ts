@@ -18,8 +18,10 @@ import {
     PROGRAM_ID
 } from "@/lib/program";
 
-export const GET = async () => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://your-domain.com";
+export const GET = async (req: Request) => {
+    // 从请求 URL 动态获取 origin，确保在任何环境都正确
+    const requestUrl = new URL(req.url);
+    const baseUrl = `${requestUrl.protocol}//${requestUrl.host}`;
 
     const payload: ActionGetResponse = {
         type: "action",

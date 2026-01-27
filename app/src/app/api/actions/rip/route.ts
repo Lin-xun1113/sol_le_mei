@@ -19,7 +19,8 @@ import {
 export const GET = async (req: Request) => {
     const url = new URL(req.url);
     const targetAddress = url.searchParams.get("target");
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://your-domain.com";
+    // 从请求 URL 动态获取 origin
+    const baseUrl = `${url.protocol}//${url.host}`;
 
     const payload: ActionGetResponse = {
         type: "action",
