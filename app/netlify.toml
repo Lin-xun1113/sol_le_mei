@@ -8,3 +8,15 @@
 # Next.js on Netlify 需要使用 runtime
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# 为 Blink 图标添加 CORS headers
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/blink-*.svg"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=31536000"

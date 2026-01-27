@@ -22,20 +22,50 @@ export const GET = async (req: Request) => {
     // 从请求 URL 动态获取 origin
     const baseUrl = `${url.protocol}//${url.host}`;
 
+    // 如果已有目标地址，显示 RIP 数量选项按钮
+    if (targetAddress) {
+        const payload: ActionGetResponse = {
+            type: "action",
+            icon: `${baseUrl}/blink-rip.svg`,
+            title: "🕯️ Sol了没 - 发送 RIP",
+            description: `为 ${targetAddress.slice(0, 4)}...${targetAddress.slice(-4)} 点燃蜡烛祈祷续命！死后你能分遗产 💀`,
+            label: "发送 RIP",
+            links: {
+                actions: [
+                    {
+                        type: "transaction",
+                        label: "🕯️ 1 RIP",
+                        href: `${baseUrl}/api/actions/rip?target=${targetAddress}&amount=1`,
+                    },
+                    {
+                        type: "transaction",
+                        label: "🕯️🕯️ 5 RIP",
+                        href: `${baseUrl}/api/actions/rip?target=${targetAddress}&amount=5`,
+                    },
+                    {
+                        type: "transaction",
+                        label: "🕯️🕯️🕯️ 10 RIP",
+                        href: `${baseUrl}/api/actions/rip?target=${targetAddress}&amount=10`,
+                    },
+                ],
+            },
+        };
+        return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
+    }
+
+    // 如果没有目标地址，显示输入框
     const payload: ActionGetResponse = {
         type: "action",
         icon: `${baseUrl}/blink-rip.svg`,
         title: "🕯️ Sol了没 - 发送 RIP",
-        description: targetAddress
-            ? `为 ${targetAddress.slice(0, 4)}...${targetAddress.slice(-4)} 点燃一根蜡烛，祈祷 TA 别断签。如果 TA 死了，你可能会分到遗产！`
-            : "输入地址，为某人祈祷续命。",
+        description: "输入地址，为某人祈祷续命。TA 死后你能分遗产！",
         label: "发送 RIP",
         links: {
             actions: [
                 {
                     type: "transaction",
                     label: "🕯️ 发送 RIP",
-                    href: `${baseUrl}/api/actions/rip?target={target}`,
+                    href: `${baseUrl}/api/actions/rip?target={target}&amount=1`,
                     parameters: [
                         {
                             name: "target",
@@ -115,9 +145,19 @@ export const POST = async (req: Request) => {
         const [targetVaultPDA] = getVaultPDA(target);
         const [graveyardPDA] = getGraveyardPDA();
 
+        // Parse rip amount from URL query param
+        let ripAmount = 1;
+        const amountParam = url.searchParams.get("amount");
+        if (amountParam) {
+            const parsed = parseInt(amountParam);
+            if (!isNaN(parsed) && parsed > 0) {
+                ripAmount = parsed;
+            }
+        }
+
         // Build send_rip instruction (V3: 需要 rip_amount 参数)
         const ix = await program.methods
-            .sendRip(1) // 默认发送 1 个 RIP
+            .sendRip(ripAmount)
             .accounts({
                 sender: sender,
                 targetProfile: targetProfilePDA,

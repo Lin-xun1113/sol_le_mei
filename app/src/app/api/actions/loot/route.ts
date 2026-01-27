@@ -23,13 +23,33 @@ export const GET = async (req: Request) => {
     // 从请求 URL 动态获取 origin
     const baseUrl = `${url.protocol}//${url.host}`;
 
+    // 如果已有目标地址，直接显示 Loot 按钮
+    if (targetAddress) {
+        const payload: ActionGetResponse = {
+            type: "action",
+            icon: `${baseUrl}/blink-loot.svg`,
+            title: "🦅 Sol了没 - 秃鹫捡漏",
+            description: `用户 ${targetAddress.slice(0, 4)}...${targetAddress.slice(-4)} 已死亡！点击捡走 TA 的遗产（50% 归你，50% 进奖池）。`,
+            label: "捡漏 Loot",
+            links: {
+                actions: [
+                    {
+                        type: "transaction",
+                        label: "🦅 立即捡漏",
+                        href: `${baseUrl}/api/actions/loot?target=${targetAddress}`,
+                    },
+                ],
+            },
+        };
+        return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
+    }
+
+    // 没有目标地址，显示输入框
     const payload: ActionGetResponse = {
         type: "action",
         icon: `${baseUrl}/blink-loot.svg`,
         title: "🦅 Sol了没 - 秃鹫捡漏",
-        description: targetAddress
-            ? `用户 ${targetAddress.slice(0, 4)}...${targetAddress.slice(-4)} 已死亡！点击捡走 TA 的遗产（50% 归你，50% 进奖池）。`
-            : "输入已死亡用户的地址，瓜分遗产！",
+        description: "输入已死亡用户的地址，瓜分遗产！",
         label: "捡漏 Loot",
         links: {
             actions: [
