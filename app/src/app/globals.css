@@ -1,0 +1,323 @@
+@import "tailwindcss";
+
+/* ========================================
+   Sol了没 - 霓虹墓地设计系统
+   ======================================== */
+
+:root {
+  /* 背景色 */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-card: #1a1a1a;
+  --bg-card-hover: #222222;
+  
+  /* 状态色 */
+  --color-alive: #00ff88;
+  --color-dead: #ff2d55;
+  --color-warning: #ffd60a;
+  --color-rip: #bf5af2;
+  --color-loot: #ff9f0a;
+  
+  /* 文字色 */
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  
+  /* 边框 */
+  --border-default: #27272a;
+  --border-glow: #00ff8833;
+  
+  /* 发光效果 */
+  --glow-alive: 0 0 20px #00ff8844, 0 0 40px #00ff8822;
+  --glow-dead: 0 0 20px #ff2d5544, 0 0 40px #ff2d5522;
+  --glow-warning: 0 0 20px #ffd60a44;
+  --glow-rip: 0 0 20px #bf5af244;
+  --glow-loot: 0 0 20px #ff9f0a44;
+}
+
+/* ========================================
+   基础样式
+   ======================================== */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
+/* ========================================
+   心跳动画
+   ======================================== */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  10% { transform: scale(1.15); }
+  20% { transform: scale(1); }
+  30% { transform: scale(1.1); }
+  40% { transform: scale(1); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 5px var(--color-alive), 0 0 10px var(--color-alive); 
+  }
+  50% { 
+    box-shadow: 0 0 20px var(--color-alive), 0 0 40px var(--color-alive), 0 0 60px var(--color-alive); 
+  }
+}
+
+@keyframes warning-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes flatline {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* ========================================
+   心电图动画
+   ======================================== */
+@keyframes ecg-alive {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ecg-line {
+  animation: ecg-alive 2s linear infinite;
+}
+
+/* ========================================
+   按钮样式
+   ======================================== */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-alive), #00cc6a);
+  color: #000;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--glow-alive);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px var(--color-alive), 0 0 60px #00ff8833;
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--color-dead), #cc0033);
+  color: #fff;
+  box-shadow: var(--glow-dead);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, var(--color-warning), #cc9900);
+  color: #000;
+  box-shadow: var(--glow-warning);
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  padding: 12px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--color-alive);
+}
+
+/* ========================================
+   卡片样式
+   ======================================== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--color-alive);
+  box-shadow: 0 0 20px #00ff8811;
+}
+
+.card-dead {
+  border-color: var(--color-dead);
+}
+
+.card-dead:hover {
+  box-shadow: var(--glow-dead);
+}
+
+/* ========================================
+   状态徽章
+   ======================================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.badge-alive {
+  background: #00ff8822;
+  color: var(--color-alive);
+  border: 1px solid var(--color-alive);
+}
+
+.badge-dead {
+  background: #ff2d5522;
+  color: var(--color-dead);
+  border: 1px solid var(--color-dead);
+}
+
+.badge-warning {
+  background: #ffd60a22;
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
+  animation: warning-flash 1s ease-in-out infinite;
+}
+
+/* ========================================
+   倒计时样式
+   ======================================== */
+.countdown {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-alive);
+  text-shadow: var(--glow-alive);
+}
+
+.countdown-warning {
+  color: var(--color-warning);
+  text-shadow: var(--glow-warning);
+  animation: warning-flash 0.5s ease-in-out infinite;
+}
+
+.countdown-dead {
+  color: var(--color-dead);
+  text-shadow: var(--glow-dead);
+}
+
+/* ========================================
+   进度条
+   ======================================== */
+.progress-bar {
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-alive), #00cc6a);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px var(--color-alive);
+}
+
+.progress-fill-warning {
+  background: linear-gradient(90deg, var(--color-warning), #ffaa00);
+  box-shadow: 0 0 10px var(--color-warning);
+}
+
+.progress-fill-danger {
+  background: linear-gradient(90deg, var(--color-dead), #cc0033);
+  box-shadow: 0 0 10px var(--color-dead);
+}
+
+/* ========================================
+   输入框
+   ======================================== */
+.input {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-alive);
+  box-shadow: 0 0 0 3px #00ff8822;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ========================================
+   墓碑卡片
+   ======================================== */
+.tombstone {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
+  border: 1px solid #333;
+  border-radius: 16px 16px 0 0;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tombstone::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--color-dead);
+  box-shadow: var(--glow-dead);
+}
+
+.tombstone:hover {
+  box-shadow: 0 0 30px #ff2d5522;
+}
+
+/* ========================================
+   Tailwind 扩展
+   ======================================== */
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --color-alive: var(--color-alive);
+  --color-dead: var(--color-dead);
+  --color-warning: var(--color-warning);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ========================================
+   响应式
+   ======================================== */
+@media (max-width: 768px) {
+  .countdown {
+    font-size: 2rem;
+  }
+}

@@ -1,0 +1,1469 @@
+{
+  "address": "7Xt8JnxfvHwJcvBtR6giutcAhbUGVSCevNAXGr3xbaHy",
+  "metadata": {
+    "name": "sol_le_mei",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "claim_rip_reward",
+      "docs": [
+        "RIP 发送者领取死后奖励 (按 RIP 比例分配)"
+      ],
+      "discriminator": [
+        15,
+        183,
+        170,
+        165,
+        88,
+        170,
+        138,
+        138
+      ],
+      "accounts": [
+        {
+          "name": "claimer",
+          "docs": [
+            "RIP 发送者 (领取奖励)"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "deceased_profile",
+          "docs": [
+            "死者的 UserProfile"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "deceased_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "deceased_owner"
+        },
+        {
+          "name": "death_record",
+          "docs": [
+            "Death Record"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  97,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "deceased_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rip_record",
+          "docs": [
+            "RIP 记录"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  105,
+                  112
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "claimer"
+              },
+              {
+                "kind": "account",
+                "path": "deceased_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "graveyard",
+          "docs": [
+            "Graveyard PDA (奖励来源)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  118,
+                  101,
+                  121,
+                  97,
+                  114,
+                  100
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "deposit",
+      "docs": [
+        "存入资金到 Vault"
+      ],
+      "discriminator": [
+        242,
+        35,
+        198,
+        137,
+        82,
+        225,
+        242,
+        182
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user_profile",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "flatline",
+      "docs": [
+        "判定死亡，触发遗嘱执行"
+      ],
+      "discriminator": [
+        121,
+        84,
+        95,
+        198,
+        86,
+        221,
+        37,
+        165
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "docs": [
+            "任何人都可以调用此指令"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_profile.owner",
+                "account": "UserProfile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_profile.owner",
+                "account": "UserProfile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "beneficiary",
+          "writable": true
+        },
+        {
+          "name": "death_record",
+          "docs": [
+            "Death Record PDA (仅 Feast 模式创建)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  97,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_profile.owner",
+                "account": "UserProfile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "heartbeat",
+      "docs": [
+        "心跳签到，更新 last_pulse"
+      ],
+      "discriminator": [
+        202,
+        104,
+        56,
+        6,
+        240,
+        170,
+        63,
+        134
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "signer": true
+        },
+        {
+          "name": "user_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_graveyard",
+      "docs": [
+        "初始化公共墓地 (Graveyard)"
+      ],
+      "discriminator": [
+        84,
+        161,
+        73,
+        164,
+        126,
+        180,
+        123,
+        127
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "graveyard",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  118,
+                  101,
+                  121,
+                  97,
+                  114,
+                  100
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "loot",
+      "docs": [
+        "(Feast Mode) 秃鹫捡漏 - 50% looter, 50% graveyard"
+      ],
+      "discriminator": [
+        16,
+        59,
+        168,
+        208,
+        108,
+        162,
+        64,
+        171
+      ],
+      "accounts": [
+        {
+          "name": "looter",
+          "docs": [
+            "秃鹫玩家"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_profile.owner",
+                "account": "UserProfile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_profile.owner",
+                "account": "UserProfile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "graveyard",
+          "docs": [
+            "Graveyard PDA"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  118,
+                  101,
+                  121,
+                  97,
+                  114,
+                  100
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "death_record",
+          "docs": [
+            "Death Record PDA"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  97,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user_profile.owner",
+                "account": "UserProfile"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "register",
+      "docs": [
+        "注册新用户，创建 UserProfile 和 Vault"
+      ],
+      "discriminator": [
+        211,
+        124,
+        67,
+        15,
+        211,
+        194,
+        178,
+        240
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "beneficiary"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "timeout_seconds",
+          "type": "u64"
+        },
+        {
+          "name": "mode",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "resurrect",
+      "docs": [
+        "用户复活 (死后重新开始)"
+      ],
+      "discriminator": [
+        180,
+        81,
+        224,
+        113,
+        57,
+        255,
+        220,
+        197
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "send_rip",
+      "docs": [
+        "发送 RIP (悼念) - 付费版",
+        "rip_amount: 购买的 RIP 数量",
+        "费用 = rip_amount * 0.001 SOL",
+        "50% 给目标用户 Vault，50% 给项目方"
+      ],
+      "discriminator": [
+        114,
+        7,
+        187,
+        252,
+        135,
+        108,
+        145,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "sender",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "target_profile",
+          "docs": [
+            "目标用户的 Profile"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "target_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "target_owner",
+          "writable": true
+        },
+        {
+          "name": "target_vault",
+          "docs": [
+            "目标用户的 Vault (仅用于验证 PDA)"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "target_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "graveyard",
+          "docs": [
+            "Graveyard PDA (接收 50% 协议费)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  118,
+                  101,
+                  121,
+                  97,
+                  114,
+                  100
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "rip_record",
+          "docs": [
+            "RIP 记录 PDA (每个 sender-target 组合唯一)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  105,
+                  112
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "sender"
+              },
+              {
+                "kind": "account",
+                "path": "target_owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "rip_amount",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "transfer_authority",
+      "docs": [
+        "转移管理员权限"
+      ],
+      "discriminator": [
+        48,
+        169,
+        76,
+        72,
+        229,
+        180,
+        55,
+        161
+      ],
+      "accounts": [
+        {
+          "name": "current_authority",
+          "docs": [
+            "当前管理员"
+          ],
+          "signer": true
+        },
+        {
+          "name": "new_authority"
+        },
+        {
+          "name": "graveyard",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  118,
+                  101,
+                  121,
+                  97,
+                  114,
+                  100
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_profile",
+      "docs": [
+        "用户修改设置 (模式永久锁定，不可更改)"
+      ],
+      "discriminator": [
+        98,
+        67,
+        99,
+        206,
+        86,
+        115,
+        175,
+        1
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "signer": true
+        },
+        {
+          "name": "user_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_beneficiary",
+          "optional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_timeout",
+          "type": {
+            "option": "u64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "withdraw_protocol_fees",
+      "docs": [
+        "项目方提取协议费"
+      ],
+      "discriminator": [
+        11,
+        68,
+        165,
+        98,
+        18,
+        208,
+        134,
+        73
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "docs": [
+            "项目方管理员"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "graveyard",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  118,
+                  101,
+                  121,
+                  97,
+                  114,
+                  100
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "DeathRecord",
+      "discriminator": [
+        247,
+        127,
+        26,
+        2,
+        254,
+        181,
+        209,
+        155
+      ]
+    },
+    {
+      "name": "Graveyard",
+      "discriminator": [
+        87,
+        34,
+        160,
+        18,
+        160,
+        246,
+        151,
+        177
+      ]
+    },
+    {
+      "name": "RipRecord",
+      "discriminator": [
+        237,
+        80,
+        247,
+        239,
+        191,
+        190,
+        137,
+        55
+      ]
+    },
+    {
+      "name": "UserProfile",
+      "discriminator": [
+        32,
+        37,
+        119,
+        205,
+        179,
+        180,
+        13,
+        194
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "StillAlive",
+      "msg": "用户仍然活着，无法执行死亡判定"
+    },
+    {
+      "code": 6001,
+      "name": "AlreadyDead",
+      "msg": "用户已经死亡"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidMode",
+      "msg": "无效的模式"
+    },
+    {
+      "code": 6003,
+      "name": "TimeoutTooShort",
+      "msg": "超时时间太短"
+    },
+    {
+      "code": 6004,
+      "name": "InsufficientFunds",
+      "msg": "资金不足"
+    },
+    {
+      "code": 6005,
+      "name": "NotBeneficiary",
+      "msg": "只有受益人可以提取"
+    },
+    {
+      "code": 6006,
+      "name": "NotFeastMode",
+      "msg": "此用户不是 Feast 模式"
+    },
+    {
+      "code": 6007,
+      "name": "Overflow",
+      "msg": "数值溢出"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidAmount",
+      "msg": "RIP 数量必须大于 0"
+    },
+    {
+      "code": 6009,
+      "name": "CannotRipSelf",
+      "msg": "不能给自己发 RIP"
+    },
+    {
+      "code": 6010,
+      "name": "NoRewardToClaim",
+      "msg": "没有可领取的奖励"
+    },
+    {
+      "code": 6011,
+      "name": "UserNotDead",
+      "msg": "用户还未死亡，无法领取奖励"
+    },
+    {
+      "code": 6012,
+      "name": "NotOwner",
+      "msg": "只有账户所有者可以执行此操作"
+    },
+    {
+      "code": 6013,
+      "name": "NotAuthority",
+      "msg": "只有管理员可以执行此操作"
+    },
+    {
+      "code": 6014,
+      "name": "VaultNotEmpty",
+      "msg": "Vault 必须为空才能关闭账户"
+    },
+    {
+      "code": 6015,
+      "name": "CooldownNotEnded",
+      "msg": "冷却期未结束，3天后才能复活或自救"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidGameRound",
+      "msg": "游戏轮次不匹配，该 RIP 记录已失效"
+    }
+  ],
+  "types": [
+    {
+      "name": "DeathRecord",
+      "docs": [
+        "死亡记录 (用于追踪死者的奖励分配)"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "deceased",
+            "docs": [
+              "死者地址"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "total_rips",
+            "docs": [
+              "死亡时的总 RIP 数"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "total_reward",
+            "docs": [
+              "可分配的奖励总额 (lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "distributed_reward",
+            "docs": [
+              "已分配的奖励 (lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "death_time",
+            "docs": [
+              "死亡时间"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "deceased_round",
+            "docs": [
+              "死者当时的游戏轮次"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "Bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Graveyard",
+      "docs": [
+        "公共墓地奖池 (Feast Mode)"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "docs": [
+              "管理员 (项目方)"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "reward_pool",
+            "docs": [
+              "奖池总额 - 可分配给 RIP 发送者 (lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "protocol_fees",
+            "docs": [
+              "协议收入累计 - 包含 RIP 50% + Loot 10% (lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RipRecord",
+      "docs": [
+        "RIP 记录账户 (记录谁给谁发过多少个 RIP)"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "sender",
+            "docs": [
+              "发送者"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "target",
+            "docs": [
+              "目标用户"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "rip_amount",
+            "docs": [
+              "发送的 RIP 数量 (可累加)"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "claimed_reward",
+            "docs": [
+              "已领取的奖励 (lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "last_updated",
+            "docs": [
+              "最后更新时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "target_round",
+            "docs": [
+              "发送时目标用户的游戏轮次"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "Bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserProfile",
+      "docs": [
+        "用户档案账户"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "docs": [
+              "用户钱包地址"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "last_pulse",
+            "docs": [
+              "上次心跳时间戳 (Unix timestamp)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "timeout_seconds",
+            "docs": [
+              "超时阈值（秒）"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "beneficiary",
+            "docs": [
+              "受益人钱包 (Safeguard Mode 下使用)"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "mode",
+            "docs": [
+              "模式: 0=Safeguard, 1=Feast"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "is_dead",
+            "docs": [
+              "是否已死亡"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "rip_count",
+            "docs": [
+              "收到的 RIP 总数量"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "rip_earnings",
+            "docs": [
+              "累计 RIP 收入 (50% 归用户, lamports) - 死后可提取"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "death_time",
+            "docs": [
+              "死亡时间戳 (用于复活冷却期计算)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "game_round",
+            "docs": [
+              "游戏轮次 (每次复活+1)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "vault_bump",
+            "docs": [
+              "Vault bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ]
+}
