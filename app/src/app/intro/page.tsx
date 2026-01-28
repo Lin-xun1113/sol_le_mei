@@ -7,7 +7,10 @@ export default function IntroPage() {
         <div className="min-h-screen pb-20">
             {/* Hero Section */}
             <div className="relative overflow-hidden bg-[var(--bg-secondary)] py-20 sm:py-32">
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+                <div className="absolute inset-0 opacity-10" style={{
+                    backgroundImage: `linear-gradient(var(--border-default) 1px, transparent 1px), linear-gradient(90deg, var(--border-default) 1px, transparent 1px)`,
+                    backgroundSize: '30px 30px'
+                }}></div>
                 <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10 text-center">
                     <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-6">
                         Alive to <span className="text-[var(--color-alive)] pulse-glow">Earn</span>,
