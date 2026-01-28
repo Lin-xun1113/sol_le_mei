@@ -29,7 +29,7 @@ export default function IntroPage() {
                         >
                             开始游戏
                         </Link>
-                        <a href="https://github.com/linxun/dieOrNot" target="_blank" className="text-sm font-semibold leading-6 text-white hover:text-[var(--color-alive)]">
+                        <a href="https://github.com/Lin-xun1113/sol_le_mei" target="_blank" className="text-sm font-semibold leading-6 text-white hover:text-[var(--color-alive)]">
                             查看源码 <span aria-hidden="true">→</span>
                         </a>
                     </div>
