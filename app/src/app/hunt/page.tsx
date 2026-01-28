@@ -75,9 +75,9 @@ export default function HuntPage() {
                     const [vaultPDA] = getVaultPDA(data.owner);
                     const vaultBalance = await connection.getBalance(vaultPDA);
 
-                    // 跳过没有余额的（除非是自己）
+                    // 跳过没有余额的活人（没油水且没死），但保留死人（作为历史记录）和自己
                     const isSelf = publicKey ? data.owner.equals(publicKey) : false;
-                    if (vaultBalance <= 0 && !isSelf) continue;
+                    if (vaultBalance <= 0 && !isSelf && !data.isDead) continue;
 
                     const lastPulse = data.lastPulse.toNumber();
                     const timeoutSeconds = data.timeoutSeconds.toNumber();
