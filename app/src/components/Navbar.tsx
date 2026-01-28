@@ -47,6 +47,7 @@ export function Navbar() {
 
                     {/* Navigation Links */}
                     <div className="hidden md:flex items-center gap-6">
+                        <NavLink href="/intro" label="📖 指南" />
                         {connected && (
                             <>
                                 <NavLink href="/" label="💓 续命台" />
